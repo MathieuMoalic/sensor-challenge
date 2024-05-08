@@ -5,7 +5,7 @@ LiquidCrystal lcd(7, 8, 9, 10, 11, 12); // RS, E, D4, D5, D6, D7
 
 const int hallSensorPin = A0;
 const int buttonPin = 6;
-const int buzzerPin = 13;
+const int ledPin = 13;
 
 int offsetValue = 0;
 
@@ -15,15 +15,12 @@ void setup()
     lcd.begin(16, 2);
     lcd.print("Magnetic Value:");
 
-    // Initialize serial communication for debugging purposes
-    Serial.begin(9600);
-
     // Set up the button pin
     pinMode(buttonPin, INPUT_PULLUP); // Use the internal pull-up resistor
 
     // Set up the buzzer pin
-    pinMode(buzzerPin, OUTPUT);
-    digitalWrite(buzzerPin, LOW); // Ensure the buzzer is off initially
+    pinMode(ledPin, OUTPUT);
+    digitalWrite(ledPin, LOW); // Ensure the buzzer is off initially
 }
 
 void loop()
@@ -48,10 +45,6 @@ void loop()
     // Calculate the zeroed value
     int zeroedValue = sensorValue - offsetValue;
 
-    // Print the sensor value to the serial monitor
-    Serial.print("Magnetic Value: ");
-    Serial.println(zeroedValue);
-
     // Display the sensor value on the LCD
     lcd.setCursor(0, 1);
     lcd.print("Value: ");
@@ -59,13 +52,13 @@ void loop()
     lcd.print("   "); // Clear any previous value by adding spaces
 
     // Check if the absolute value exceeds the threshold and buzz if it does
-    if (abs(zeroedValue) > 5)
+    if (abs(zeroedValue) > 3)
     {
-        digitalWrite(buzzerPin, HIGH); // Turn the buzzer on
+        digitalWrite(ledPin, HIGH); // Turn the buzzer on
     }
     else
     {
-        digitalWrite(buzzerPin, LOW); // Turn the buzzer off
+        digitalWrite(ledPin, LOW); // Turn the buzzer off
     }
 
     // Add a small delay to make the readings more readable
